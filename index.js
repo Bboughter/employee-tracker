@@ -52,6 +52,9 @@ function mainPrompt() {
         case 'Add an employee':
           addEmployee()
           break;
+        case 'Update an employee role':
+          updateEmployeeRole()
+          break;
         default:
           console.log(`Sorry, please choose an option. ${answers}.`);
       }
@@ -213,4 +216,53 @@ function addEmployee() {
     });
   });
 }
+
+function updateEmployeeRole() {
+  db.query('SELECT id, CONCAT(first_name, " ", last_name) AS name FROM employee', (err, res) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    const employeesChoices = res.map(employee => ({
+      name: employee.employee.name,
+      value: employee.id,
+    }));
+    inquirer.prompt ({
+        type: 'list',
+        name: 'employee_id',
+        message: 'Which employee would you like to update?',
+        choices: employeesChoices
+      }).then((employeeAnswer) => {
+        db.query('SELECT id, title FROM roles', (err, res) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          const rolesChoices = res.map( role => ({
+            name: role.title,
+            value: role.id,
+          }));
+          inquirer.prompt({
+              type: 'list',
+              name: 'role_id',
+              message: 'What is the employee\'s new role?',
+              choices: rolesChoices
+            }) .then((roleAnswer) => {
+              db.query(
+                'UPDATE employee SET role_id =? WHERE id =?',
+                [roleAnswer.role_id, employeeAnswer.employee_id],
+                (err, res) => {
+                  if (err) {
+                    console.log(err);
+                    return;
+                  }
+                  console.log(`${res.affectedRows} employee updated!\n`);
+                  mainPrompt();
+                }
+                );
+              });
+            });
+          });
+        });
+      }
 mainPrompt();
