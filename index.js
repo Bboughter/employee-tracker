@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const consoleTable = require('console.table');
 
 
-
+//connection to mysql workbench
 const db = mysql.createConnection(
   {
     host: 'localhost',
@@ -14,6 +14,7 @@ const db = mysql.createConnection(
   console.log(`Connected to the employees_db database.`)
 );
 
+//function for the initial prompt
 function mainPrompt() {
   inquirer
     .prompt([
