@@ -38,7 +38,7 @@ function mainPrompt() {
           viewAllDepartments()
           break;
         case 'View all roles':
-         viewAllRoles()
+          viewAllRoles()
           break;
         case 'View all employees':
           viewAllEmployees()
@@ -58,7 +58,7 @@ function mainPrompt() {
         default:
           console.log(`Sorry, please choose an option. ${answers}.`);
       }
-     
+
     })
     .catch((error) => {
       console.log(error);
@@ -80,7 +80,18 @@ function viewAllRoles() {
 }
 
 function viewAllEmployees() {
-  db.query('SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.name AS department_name, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id', (err, res) => {
+  db.query(`SELECT 
+    employee.id,
+    CONCAT(employee.first_name, ' ', employee.last_name) AS name,
+    roles.title AS role,
+    department.name AS department,
+    roles.salary AS salary,
+    CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+    FROM  
+    employee 
+    LEFT JOIN roles ON employee.role_id = roles.id 
+    LEFT JOIN department ON roles.department_id = department.id 
+    LEFT JOIN employee manager ON employee.manager_id = manager.id`, (err, res) => {
     console.table(res);
     mainPrompt();
   })
@@ -88,14 +99,14 @@ function viewAllEmployees() {
 
 function addDepartment() {
   inquirer
-  .prompt([
+    .prompt([
       {
         type: 'input',
         name: 'name',
         message: 'What is the name of the department you would like to add?'
       }
     ])
-  .then((answers) => {
+    .then((answers) => {
       db.query('INSERT INTO department SET?', { name: answers.name }, (err, res) => {
         if (err) {
           console.log(err);
@@ -105,7 +116,7 @@ function addDepartment() {
         }
       })
     })
-  .catch((error) => {
+    .catch((error) => {
       console.log(error);
     })
 }
@@ -151,7 +162,7 @@ function addRole() {
       console.log(error);
     });
 }
-  
+
 
 function addEmployee() {
   db.query('SELECT id, first_name, last_name FROM employee', (err, res) => {
@@ -183,7 +194,7 @@ function addEmployee() {
         type: 'input',
         name: 'role_id',
         message: 'What is the employee\'s role ID?',
-        
+
       },
       {
         type: 'list',
@@ -192,28 +203,28 @@ function addEmployee() {
         choices: managersChoices
       }
     ])
-    .then((answers) => {
-      db.query(
-        'INSERT INTO employee SET ?',
-        {
-          first_name: answers.first_name,
-          last_name: answers.last_name,
-          role_id: answers.role_id,
-          manager_id: answers.manager_id
-        },
-        (err, res) => {
-          if (err) {
-            console.log(err);
-            return;
+      .then((answers) => {
+        db.query(
+          'INSERT INTO employee SET ?',
+          {
+            first_name: answers.first_name,
+            last_name: answers.last_name,
+            role_id: answers.role_id,
+            manager_id: answers.manager_id
+          },
+          (err, res) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            console.log(`${res.affectedRows} employee inserted!\n`);
+            mainPrompt();
           }
-          console.log(`${res.affectedRows} employee inserted!\n`);
-          mainPrompt();
-        }
-      );
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   });
 }
 
@@ -223,46 +234,44 @@ function updateEmployeeRole() {
       console.log(err);
       return;
     }
-    const employeesChoices = res.map(employee => ({
-      name: employee.employee.name,
-      value: employee.id,
-    }));
-    inquirer.prompt ({
-        type: 'list',
-        name: 'employee_id',
-        message: 'Which employee would you like to update?',
-        choices: employeesChoices
-      }).then((employeeAnswer) => {
-        db.query('SELECT id, title FROM roles', (err, res) => {
-          if (err) {
-            console.log(err);
-            return;
-          }
-          const rolesChoices = res.map( role => ({
-            name: role.title,
-            value: role.id,
-          }));
-          inquirer.prompt({
-              type: 'list',
-              name: 'role_id',
-              message: 'What is the employee\'s new role?',
-              choices: rolesChoices
-            }) .then((roleAnswer) => {
-              db.query(
-                'UPDATE employee SET role_id =? WHERE id =?',
-                [roleAnswer.role_id, employeeAnswer.employee_id],
-                (err, res) => {
-                  if (err) {
-                    console.log(err);
-                    return;
-                  }
-                  console.log(`${res.affectedRows} employee updated!\n`);
-                  mainPrompt();
-                }
-                );
-              });
-            });
-          });
+    const employeesChoices = res.map(({ id, name }) => ({ name: name, value: id }));
+    });
+    inquirer.prompt({
+      type: 'list',
+      name: 'employee_id',
+      message: 'Which employee would you like to update?',
+      choices: employeesChoices
+    }).then((employeeAnswer) => {
+      db.query('SELECT id, title FROM roles', (err, res) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        const rolesChoices = res.map(role => ({
+          name: role.title,
+          value: role.id,
+        }));
+        inquirer.prompt({
+          type: 'list',
+          name: 'role_id',
+          message: 'What is the employee\'s new role?',
+          choices: rolesChoices
+        }).then((roleAnswer) => {
+          db.query(
+            'UPDATE employee SET role_id =? WHERE id =?',
+            [roleAnswer.role_id, employeeAnswer.employee_id],
+            (err, res) => {
+              if (err) {
+                console.log(err);
+                return;
+              }
+              console.log(`${res.affectedRows} employee updated!\n`);
+              mainPrompt();
+            }
+          );
         });
-      }
+      });
+    });
+  };
+
 mainPrompt();
