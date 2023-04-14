@@ -18,9 +18,24 @@ The user will need to have access to a terminal such as GitBash. The user will n
 
 ## Usage
 
-The user will need to 'npm i' to install all the required dependencies. The user will then need run 'node index.js' to start the progrm. The user will be presented with a question asking what they would like to do. They will be able to choose from different options such as view roles, view department, view employees, add a department, add a role, add an employee, and update an employees role. Based off the users selection, either the user will be presented with a table of the requested information or the user will be presented with questions pertaining to their reques. Once completed, it will be noted that the information was successfully uploaded. The user can view the new added information by choosing to view the roles, departments, or employee information.
+The user will need to 'npm i' to install all the required dependencies. The user will then need run 'node index.js' to start the progrm. The user will be presented with a question asking what they would like to do. They will be able to choose from different options such as view roles, view department, view employees, add a department, add a role, add an employee, and update an employees role. 
 
-This is a link to a demo of the application 
+![Screenshot 2023-04-13 201241](https://user-images.githubusercontent.com/113574704/231932603-9127749c-8e55-4ebe-8ead-36b3ddcc7817.png)
+
+Based off the users selection, either the user will be presented with a table of the requested information or the user will be presented with questions pertaining to their request. 
+
+![Screenshot 2023-04-13 201327](https://user-images.githubusercontent.com/113574704/231932605-04f4b785-3993-49ab-b662-cdb540f40cfe.png)
+![Screenshot 2023-04-13 201342](https://user-images.githubusercontent.com/113574704/231932607-795ea8ab-8f45-4859-8e5e-a7cd1665ab9a.png)
+![Screenshot 2023-04-13 201403](https://user-images.githubusercontent.com/113574704/231932608-7fc59dd6-32e1-4e94-a04a-bb111f005bb8.png)
+
+Once completed, it will be noted that the information was successfully uploaded. The user can view the new added information by choosing to view the roles, departments, or employee information.
+
+![Screenshot 2023-04-13 201444](https://user-images.githubusercontent.com/113574704/231932609-23eea268-16e8-4032-a3ac-1434366e353a.png)
+![Screenshot 2023-04-13 201504](https://user-images.githubusercontent.com/113574704/231932610-fc71a2b6-39f6-402f-84c1-998df0d73f94.png)
+![Screenshot 2023-04-13 201529](https://user-images.githubusercontent.com/113574704/231932613-0dcd2693-375f-4388-9758-3b4d312f3927.png)
+![Screenshot 2023-04-13 201552](https://user-images.githubusercontent.com/113574704/231932617-ed71ee66-7e21-4166-b4bb-08c4c57be7f9.png)
+
+This is a link to a demo of the application https://drive.google.com/file/d/18M4ERZpt8_kXZdSMl49s5O6l1m6vRG1M/view.
 
 ## Credits
 
