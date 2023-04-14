@@ -29,7 +29,6 @@ function mainPrompt() {
           'Add a role',
           'Add an employee',
           'Update an employee role',
-          'Delete an employee role'
         ]
       }
     ])
