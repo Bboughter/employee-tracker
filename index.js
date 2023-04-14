@@ -66,6 +66,7 @@ function mainPrompt() {
     })
 };
 
+//function to view all departments
 function viewAllDepartments() {
   db.query('SELECT * FROM department', (err, res) => {
     console.table(res);
@@ -73,6 +74,7 @@ function viewAllDepartments() {
   })
 }
 
+//function to view all roles
 function viewAllRoles() {
   db.query('SELECT * FROM roles', (err, res) => {
     console.table(res);
@@ -80,6 +82,7 @@ function viewAllRoles() {
   })
 }
 
+//function to view all employees
 function viewAllEmployees() {
   db.query(`SELECT 
     employee.id,
@@ -98,6 +101,7 @@ function viewAllEmployees() {
   })
 }
 
+//function to add a department
 function addDepartment() {
   inquirer
     .prompt([
@@ -122,6 +126,7 @@ function addDepartment() {
     })
 }
 
+//function to add a role
 function addRole() {
   inquirer
     .prompt([
@@ -164,7 +169,7 @@ function addRole() {
     });
 }
 
-
+//function to add an employee
 function addEmployee() {
   db.query('SELECT id, first_name, last_name FROM employee', (err, res) => {
     if (err) {
@@ -229,6 +234,7 @@ function addEmployee() {
   });
 }
 
+//update an employee role
 function updateEmployeeRole() {
   db.query('SELECT id, CONCAT(first_name, " ", last_name) AS name FROM employee', (err, res) => {
     if (err) {
